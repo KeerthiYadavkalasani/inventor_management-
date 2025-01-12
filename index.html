@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #563d7c;
+            color: white;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        header h1{
+            margin:0;
+        }
+        header nav a{
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        header nav a:hover{
+           text-decoration: underline;
+        }
+
+        main{
+            padding: 20px;
+        }
+        .products h2 {
+            margin-bottom: 5px;
+            font-size: 20px;
+        }
+        .products p{
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .add-product-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 10px;
+              text-decoration:none;
+        }
+        .add-product-btn:hover{
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+               text-decoration:none;
+        }
+
+        .edit-btn {
+            background-color: green;
+             margin-right: 5px;
+        }
+
+        .delete-btn {
+            background-color: red;
+        }
+
+        .edit-btn:hover{
+          background-color:darkgreen;
+        }
+
+        .delete-btn:hover{
+           background-color:darkred;
+        }
+         .plot-container{
+            margin-top: 20px;
+         }
+        .plot-container img{
+            max-width: 800px;
+           max-height: 600px;
+         }
+
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+        }
+
+        /* Add product page*/
+          .add-product-container{
+            display: none;
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-product-container.active{
+            display:block;
+             display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+       .add-product-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .add-product-container form div {
+            margin-bottom: 15px;
+        }
+
+        .add-product-container label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .add-product-container input[type="text"], .add-product-container  input[type="number"] {
+           width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .add-product-container button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+             margin-top: 10px;
+        }
+         .add-product-container button[type="submit"]:hover {
+             background-color: #0056b3;
+        }
+       .back-link {
+            display: inline-block;
+           margin-top: 20px;
+          color: #007bff;
+          text-decoration: none;
+           cursor: pointer;
+        }
+       .back-link:hover {
+          text-decoration: underline;
+        }
+
+       /* Edit product page*/
+        .edit-product-container{
+           display: none;
+            width: 90%;
+            max-width: 600px;
+              margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .edit-product-container.active{
+            display:block;
+            display: flex;
+            align-items: center;
+             justify-content: center;
+        }
+
+        .edit-product-container h2 {
+            margin-bottom: 20px;
+        }
+
+       .edit-product-container form div {
+            margin-bottom: 15px;
+        }
+
+       .edit-product-container label {
+            display: block;
+            margin-bottom: 5px;
+       }
+        .edit-product-container input[type="text"], .edit-product-container  input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .edit-product-container button[type="submit"] {
+           background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+              margin-top: 10px;
+        }
+        .edit-product-container button[type="submit"]:hover {
+           background-color: #0056b3;
+        }
+        .edit-product-container .back-link {
+            display: inline-block;
+           margin-top: 20px;
+           color: #007bff;
+         text-decoration: none;
+        }
+
+       /* delete page*/
+       .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+             max-width: 600px;
+             text-align: center;
+        }
+         .modal-content h2{
+             margin-bottom: 20px;
+         }
+        .modal-content .confirmation {
+            margin-bottom: 15px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+             cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+       .delete-product-container{
+           display: none;
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+          .delete-product-container.active{
+            display:block;
+            display: flex;
+            align-items: center;
+             justify-content: center;
+        }
+       .delete-product-container h2 {
+          margin-bottom: 20px;
+       }
+
+       .delete-product-container .confirmation{
+          margin-bottom: 15px;
+       }
+
+        .delete-product-container button[type="submit"] {
+            background-color: red;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+           cursor: pointer;
+               margin-top: 10px;
+        }
+
+        .delete-product-container button[type="submit"]:hover {
+            background-color: darkred;
+        }
+        .delete-product-container .back-link {
+            display: inline-block;
+          margin-top: 20px;
+          color: #007bff;
+          text-decoration: none;
+        }
+         a{
+          text-decoration: none;
+           color: white;
+         }
+         /* Sales data */
+        .sales-data-container{
+          display: none;
+          width: 90%;
+          max-width: 600px;
+           margin: 20px auto;
+          background-color: #fff;
+         padding: 20px;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+          .sales-data-container.active{
+              display: block;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+        }
+        .sales-data-container h2{
+           margin-bottom: 20px;
+       }
+       .sales-data-container form div{
+          margin-bottom: 15px;
+       }
+        .sales-data-container label{
+           display: block;
+            margin-bottom: 5px;
+        }
+       .sales-data-container input[type="text"], .sales-data-container input[type="number"]{
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+         .sales-data-container button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+              margin-top: 10px;
+        }
+        .sales-data-container button[type="submit"]:hover {
+           background-color: #0056b3;
+       }
+        .sales-data-container .back-link{
+            display: inline-block;
+           margin-top: 20px;
+           color: #007bff;
+           text-decoration: none;
+        }
+    .prediction-container{
+           margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+           border-radius: 5px;
+          background-color: #f9f9f9;
+
+       }
+    </style>
+</head>
+<body>
+    <div class="container">
+         <header>
+            <h1>Inventory</h1>
+            <nav>
+               <a href="#" data-page="home">Overview</a>
+               <a href="#" data-page="home">Products</a>
+               <a href="#" data-page="home">Location</a>
+               <a href="#" data-page="home">Transfers</a>
+               <a href="#" data-page="sales_data">Sales Data</a>
+            </nav>
+         </header>
+        <main>
+           <section class="page-section products active" data-page="home">
+                 <h2>Products</h2>
+                 <p>Manage products in your central Warehouse</p>
+                <a href="#" class="add-product-btn" data-page="add_product">+ Add Product</a>
+
+                <table id="productTable">
+                  <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product Name</th>
+                        <th>Unallocated Quantity</th>
+                         <th>Actions</th>
+                         <th>Recommended Stock</th>
+                          <th>Sales</th>
+                    </tr>
+                    </thead>
+                     <tbody>
+
+                     </tbody>
+                </table>
+                <div class="plot-container" id="plotContainer">
+                     <!--Plot will be displayed here -->
+                </div>
+           </section>
+
+          <div class="page-section add-product-container" data-page="add_product">
+                <h2>Add New Product</h2>
+                <form id="addProductForm">
+                    <div>
+                        <label for="name">Product Name:</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div>
+                       <label for="quantity">Quantity:</label>
+                       <input type="number" name="quantity" required>
+                    </div>
+                  <button type="submit">Add Product</button>
+                </form>
+                <a class="back-link" href="#" data-page="home">Back to Product List</a>
+        </div>
+
+
+            <div class="page-section edit-product-container" data-page="edit_product">
+                <h2>Edit Product</h2>
+                <form id="editProductForm">
+                    <div>
+                       <label for="name">Product Name:</label>
+                       <input type="text" name="name" required>
+                   </div>
+                   <div>
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" name="quantity" required>
+                    </div>
+                   <button type="submit">Update Product</button>
+                </form>
+                <a class="back-link" href="#" data-page="home">Back to Product List</a>
+            </div>
+            
+            <div id="deleteModal" class="modal">
+               <div class="modal-content">
+                    <span class="close" id="closeModal">×</span>
+                     <h2>Delete Product</h2>
+                     <p class="confirmation">Are you sure you want to delete: <b id="deleteProductName"></b>?</p>
+                    <form id="deleteProductForm">
+                         <button type="submit">Delete</button>
+                  </form>
+               </div>
+          </div>
+
+
+              <div class="page-section sales-data-container" data-page="sales_data">
+                  <h2>Sales Data</h2>
+                   <form id="salesDataForm">
+                         <div>
+                           <label for="sales-file">Upload CSV file</label>
+                            <input type="file" name="file" id="sales-file" accept=".csv" required>
+                        </div>
+                       <button type="submit">Get Prediction</button>
+                   </form>
+                   <a href="#" class="back-link" data-page="home">Back to Product List</a>
+                   <div id="predictionContainer" class="prediction-container"></div>
+               </div>
+        </main>
+    </div>
+
+    <script>
+         let products = [];
+         let currentProductId = null;
+          let modal = document.getElementById("deleteModal");
+           let closeBtn = document.getElementById("closeModal");
+
+          const navigationLinks = document.querySelectorAll('header nav a, .add-product-btn, .back-link');
+         const pageSections = document.querySelectorAll('.page-section');
+         const productTableBody = document.querySelector('#productTable tbody');
+           const plotContainer = document.querySelector('#plotContainer');
+           const predictionContainer = document.querySelector('#predictionContainer');
+          // Function to hide all pages
+           function hideAllPages(){
+                pageSections.forEach(section => section.classList.remove('active'));
+           }
+
+            //Function to render table row
+           function renderTableRow(product){
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product.id}</td>
+                <td>${product.name}</td>
+                <td>${product.quantity}</td>
+                 <td>
+                    <a href="#" class="edit-btn" data-page="edit_product"  data-id="${product.id}">Edit</a>
+                    <a href="#" class="delete-btn"  data-id="${product.id}">Delete</a>
+                 </td>
+                 <td>${product.recommended_stock}</td>
+                  <td>${product.sales}</td>
+                `;
+            productTableBody.appendChild(row);
+
+            // Add event listeners to buttons on each row
+               const editButton = row.querySelector('.edit-btn');
+              const deleteButton = row.querySelector('.delete-btn');
+
+               editButton.addEventListener('click', (event) =>{
+                    event.preventDefault();
+                     currentProductId = product.id;
+                   handleEdit(product.id);
+               });
+             deleteButton.addEventListener('click', (event) =>{
+                    event.preventDefault();
+                     currentProductId = product.id;
+                     handleDelete(product.id)
+            });
+        }
+         // Function to render the table with data
+           function renderProductTable() {
+                productTableBody.innerHTML = ''; // Clear existing data
+                products.forEach(product=> renderTableRow(product));
+            }
+        // Function to show the page
+         function showPage(pageId){
+            hideAllPages();
+            const page = document.querySelector(`.page-section[data-page='${pageId}']`);
+             if(page) page.classList.add('active');
+
+          }
+
+
+        // Event handler for Navigation links
+         navigationLinks.forEach(link =>{
+               link.addEventListener('click', function(event){
+                   event.preventDefault();
+                   const pageId = this.getAttribute('data-page');
+                   showPage(pageId);
+
+                   if (pageId === 'home') {
+                        fetchData();  // Fetch data if the home page is opened again
+                  }
+              });
+         })
+
+          //Edit functionality
+          function handleEdit(productId){
+             const editContainer = document.querySelector('.edit-product-container');
+             if(editContainer){
+                  showPage('edit_product');
+
+                 // Pre-fill edit form
+                const editForm = document.querySelector('#editProductForm');
+                 const product = products.find(p=> p.id === productId);
+                  editForm.querySelector('input[name="name"]').value = product.name;
+                  editForm.querySelector('input[name="quantity"]').value = product.quantity;
+             }
+         }
+         //delete functionality
+         function handleDelete(productId){
+             const product = products.find(p=> p.id === productId);
+             document.querySelector('#deleteProductName').innerText = product.name;
+              modal.style.display = "block";
+         }
+
+           // Close the modal
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+         window.onclick = function(event){
+           if(event.target == modal) modal.style.display="none";
+       }
+          // Function to add new product
+         async function addProduct(event){
+             event.preventDefault();
+            const addForm = document.getElementById('addProductForm');
+                const formData = new FormData(addForm);
+
+                 try{
+                    const response = await fetch('/products',{
+                        method: 'POST',
+                        headers:{
+                           'Content-Type': 'application/json',
+                         },
+                       body:JSON.stringify(Object.fromEntries(formData))
+                     });
+
+                    if(!response.ok){
+                        const errorData = await response.json();
+                          alert(errorData.error); // Display error to user
+                           throw new Error(`HTTP error! status: ${response.status}`);
+                     }
+                     fetchData(); // Fetch the data after making the changes and show it in home page
+
+                     showPage('home'); // Redirect to the home page
+               }catch(error){
+                   console.log("Error adding the product", error);
+                     //alert("There was an error adding the product.");
+                }
+         }
+
+            // Event listener to Add product form
+           const addProductForm = document.getElementById('addProductForm');
+           if(addProductForm){
+              addProductForm.addEventListener('submit', async function(event){
+                   event.preventDefault();
+                    await addProduct(event);
+               });
+           }
+
+          // Event listener for Edit product Form
+         const editProductForm = document.getElementById('editProductForm');
+            if(editProductForm){
+                editProductForm.addEventListener('submit', async function(event){
+                       event.preventDefault();
+                     await  updateProduct(event);
+                })
+             }
+
+
+             //Update product
+        async  function updateProduct(event){
+            event.preventDefault();
+              const editForm = document.getElementById('editProductForm');
+            const formData = new FormData(editForm);
+
+             try{
+                 const response = await fetch(`/products/${currentProductId}`,{
+                      method: 'PUT',
+                       headers:{
+                         'Content-Type': 'application/json',
+                        },
+                      body:JSON.stringify(Object.fromEntries(formData))
+                     });
+
+                 if(!response.ok){
+                      throw new Error(`HTTP error! status: ${response.status}`);
+                   }
+
+                    fetchData();
+                    showPage('home');
+                }catch (error) {
+                   console.error("Error updating product:", error);
+                    alert("There was an error updating the product.");
+               }
+         }
+
+            // Event listener to Delete Product form
+           const deleteProductForm = document.getElementById('deleteProductForm');
+            if(deleteProductForm){
+                deleteProductForm.addEventListener('submit', async function(event){
+                    event.preventDefault();
+                       await deleteProduct(event);
+                });
+             }
+
+           //Delete product from API
+            async function deleteProduct(event) {
+                event.preventDefault();
+              try {
+                  const response = await fetch(`/products/${currentProductId}`, {
+                    method: 'DELETE',
+                     });
+
+                   if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                   }
+                      fetchData();
+                      modal.style.display = "none";
+
+                } catch (error) {
+                  console.error("Error deleting product:", error);
+                  alert("There was an error deleting the product.");
+                }
+             }
+
+         // **Example of API integration (to be modified):**
+         async function fetchData(){
+             try {
+                const response = await fetch('/products'); // Your backend endpoint
+                   if (!response.ok) {
+                       throw new Error(`HTTP error! status: ${response.status}`);
+                   }
+                  const data = await response.json(); // Assuming the response is JSON
+                 // Handle your data and render the table here
+                products = data;
+                renderProductTable();
+                } catch (error) {
+                    console.error("Fetch error:", error);
+                    // Handle the error
+                }
+        }
+        fetchData();
+
+
+        // Sales Data Prediction
+        const salesDataForm = document.getElementById('salesDataForm');
+          if (salesDataForm) {
+            salesDataForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+              const formData = new FormData(salesDataForm);
+               try{
+                const response = await fetch('/predict_sales',{
+                    method: 'POST',
+                   body: formData
+                   });
+
+                   if (!response.ok) {
+                        const errorData = await response.json();
+                       alert(errorData.error);  // Display the error from backend
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                   const data = await response.json();
+                   alert("Sales data processed successfully")
+                   fetchData();
+                   predictionContainer.innerText = "";
+                }
+                 catch(error){
+                 console.error('Prediction error', error);
+                 predictionContainer.innerText = "There was an error processing the prediction";
+              }
+          });
+        }
+
+       // Sample Data for sale
+         const sales_data = [
+            { name: 'apple phone', sales: 50 },
+            { name: 'xiomixi', sales: 100 },
+            { name: 'apple phone', sales: 120 },
+             { name: 'mi phone', sales: 70 },
+            { name: 'sony sled', sales: 150 },
+             { name: 'sony sled', sales: 80 }
+        ];
+           
+         async function updateSales(){
+              try {
+                const response = await fetch('/update_sales', {
+                   method: 'POST',
+                   headers: {
+                        'Content-Type': 'application/json',
+                       },
+                      body: JSON.stringify({ sales: sales_data }),
+                    });
+
+                   if (!response.ok) {
+                    const errorData = await response.json();
+                   console.error('Error updating sales:', errorData);
+                    alert("Error updating sales, please check console")
+                  }
+                  fetchData();
+
+               } catch (error) {
+                 console.error("Update sales error:", error);
+                   alert("There was an error updating sales.")
+                 }
+           }
+        updateSales();
+         // Sample data for prediction (you can replace with actual form data)
+         const salesData = [
+            { date: '2024-01-01', sales: 100 },
+            { date: '2024-01-02', sales: 120 },
+            { date: '2024-01-03', sales: 110 },
+            { date: '2024-01-04', sales: 130 },
+           { date: '2024-01-05', sales: 150 },
+           { date: '2024-01-06', sales: 140 }
+        ];
+
+         const newPredictionData = [
+              {date: '2024-01-07', sales: null},
+              {date: '2024-01-08', sales: null}
+           ]
+
+        async function makePrediction(){
+            try {
+               const response = await fetch('/predict', {
+                   method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                       },
+                     body: JSON.stringify({ sales: salesData, new_data: newPredictionData }),
+                   });
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+               const data = await response.json();
+                 if(data.plot){
+                     const plotImage = document.createElement('img');
+                     plotImage.src = 'data:image/png;base64,' + data.plot;
+                     plotContainer.appendChild(plotImage);
+                 }
+               console.log(data.predictions);
+
+            }
+            catch (error) {
+              console.error("Prediction error:", error);
+                 // Handle the error
+            }
+       }
+        makePrediction();
+       showPage('home'); // show home page initially
+    </script>
+</body>
+</html>
